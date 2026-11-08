@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Статистика{% endblock %}
+{% block content %}
+<section class="analytics">
+  <div class="analytics-heading"><div><span class="eyebrow">FINDLY / АНАЛИТИКА</span><h1>Каждая вещь —<br><span>история возвращения.</span></h1><p>Статистика объявлений кампуса. Узнайте, где чаще теряются вещи и какие категории возвращаются владельцам.</p></div><span class="analytics-badge"><i></i> Данные из базы Findly</span></div>
+  <div class="metric-grid">
+    <article class="metric"><span>Всего объявлений</span><strong>{{summary.total}}</strong><small>За всё время</small></article>
+    <article class="metric"><span><i class="metric-dot blue"></i> Активные</span><strong>{{summary.active}}</strong><small>Ещё ищут своего владельца</small></article>
+    <article class="metric"><span><i class="metric-dot green"></i> Возвращено</span><strong>{{summary.returned}}</strong><small>Вещи снова дома</small></article>
+    <article class="metric metric-highlight"><span>Доля возвращённых</span><strong>{{rate}}<em>%</em></strong><small>От всех объявлений</small></article>
+  </div>
+  <div class="analytics-grid">
+    <section class="analytics-panel"><div class="panel-heading"><div><span class="eyebrow">01 / ЛОКАЦИИ</span><h2>Где теряются вещи</h2></div><span class="panel-chip">Топ-8</span></div><p class="panel-description">Доля каждого места от общего числа объявлений.</p>
+    {% if locations %}<div class="location-list">{% for row in locations %}<div class="location-row"><span class="location-rank">{{'%02d'|format(loop.index)}}</span><div class="location-content"><div class="location-label"><strong>{{row.name}}</strong><span>{{row.total}} <small> / {{row.active}} активных</small></span></div><div class="analytics-track"><div class="location-fill" style="width:{{row.total / summary.total * 100}}%"></div></div><div class="location-share">{{'%.1f'|format(row.total / summary.total * 100)}}% всех объявлений</div></div></div>{% endfor %}</div>{% else %}<div class="analytics-empty">Пока нет объявлений. Статистика появится после добавления первой вещи.</div>{% endif %}
+    </section>
+    <section class="analytics-panel"><div class="panel-heading"><div><span class="eyebrow">02 / КАТЕГОРИИ</span><h2>Возвращаются домой</h2></div></div><p class="panel-description">Процент возврата внутри каждой категории. Учитываются все категории, включая небольшие выборки.</p>
+    {% if summary.total %}<div class="analytics-table-wrap"><table class="analytics-table"><thead><tr><th scope="col">Категория</th><th scope="col">Всего</th><th scope="col">Возврат</th></tr></thead><tbody>{% for row in categories %}{% set percent = row.returned / row.total * 100 if row.total else 0 %}<tr><th scope="row">{{row.name}}</th><td>{{row.total}}</td><td><div class="return-value"><b>{{'%.1f'|format(percent)}}%</b><small>{{row.returned}} из {{row.total}}</small></div><div class="analytics-track"><div class="return-fill" style="width:{{percent}}%"></div></div></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="analytics-empty">Здесь появятся показатели возврата по категориям.</div>{% endif %}
+    <div class="analytics-note">Процент возврата = возвращённые вещи / все объявления в категории. Изменения статуса учитываются при обновлении страницы.</div></section>
+  </div>
+  <div class="analytics-footer"><span>Доступно только администрации · за всё время</span><a href="{{url_for('home')}}">К объявлениям →</a></div>
+</section>
+{% endblock %}
