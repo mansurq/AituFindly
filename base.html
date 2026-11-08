@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Findly{% endblock %} — AITU Lost & Found</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css',v='7') }}"></head>
+<body><header class="topbar"><div class="shell nav"><a class="brand" href="{{ url_for('home') }}"><span class="brand-icon">F<span class="dot">•</span></span><span>findly<span class="brand-dot">.</span></span></a><div class="navright">{% if session.get('admin') %}<a class="navlink stats-nav" href="{{url_for('statistics')}}"{% if request.endpoint == 'statistics' %} aria-current="page"{% endif %}>Статистика</a><form method="post" action="{{url_for('admin_logout')}}"><input type="hidden" name="csrf_token" value="{{csrf_token()}}"><button class="navlink logout" type="submit">Выйти из администрации</button></form>{% else %}<a class="navlink" href="{{url_for('admin_login')}}">Администрация</a>{% endif %}<span class="university">AITU LOST & FOUND</span><a class="navlink" href="{{ url_for('home') }}">Все объявления</a><a class="navlink" href="{{url_for('lost_items_map')}}">Карта потерь</a><a class="btn btn-small" href="{{ url_for('new') }}">+ Добавить вещь</a></div></div></header>
+<main class="shell">{% with messages=get_flashed_messages(with_categories=true) %}{% for kind,message in messages %}<div class="flash {{kind}}">{{message}}</div>{% endfor %}{% endwith %}{% block content %}{% endblock %}</main>
+<footer><div class="shell footer-inner"><span>© Findly — локальный прототип для AITU</span><span>Бюро находок Astana IT University</span></div></footer>
+<audio id="findly-success-sound" preload="auto" src="{{ url_for('static', filename='sounds/success_bell.mp3') }}"></audio>
+<script src="{{ url_for('static', filename='success-sound.js', v='1') }}"></script>
+</body></html>

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% block title %}Добавить объявление<script>
+const input = document.getElementById('photo'), preview = document.getElementById('photo-preview');
+let previewURL;
+input.addEventListener('change', () => {
+  if (previewURL) URL.revokeObjectURL(previewURL);
+  preview.hidden = true;
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 8 * 1024 * 1024) { alert('Выберите фото до 8 МБ.'); input.value = ''; return; }
+  previewURL = URL.createObjectURL(file); preview.src = previewURL; preview.hidden = false;
+});
+</script><script src="{{url_for('static', filename='map-form.js')}}"></script>{% endblock %}{% block content %}<div class="page-back"><a href="{{url_for('home')}}">← К объявлениям</a></div><div class="form-layout"><div><span class="eyebrow">HELP SOMEONE OUT</span><h1>Новое объявление<span class="brand-dot">.</span></h1><p class="intro">Расскажи, что ты нашёл или потерял. Запись будет сохранена прямо в SQLite на твоём компьютере.</p><div class="helper">💡 <b>Совет:</b> укажи точное место и особенности вещи — так её будет проще найти.</div></div><form method="post" enctype="multipart/form-data" class="form-card"><label>Название вещи *<input name="title" value="{{request.form.get('title', '')}}" maxlength="120" minlength="2" required placeholder="Например, чёрные AirPods"></label><label>Категория *<select name="category" required><option value="">Выберите категорию</option>{% for c in categories %}<option value="{{c.category_id}}" {% if request.form.get('category')==c.category_id|string %}selected{% endif %}>{{c.name}}</option>{% endfor %}</select></label><label>Фото вещи<input id="photo" type="file" name="photo" accept="image/jpeg,image/png,image/webp"><small>JPG, PNG или WebP, до 8 МБ.</small></label><img id="photo-preview" class="photo-preview" hidden alt="Предпросмотр фото"><section class="map-section"><h3>Где потеряли вещь?</h3><p>Выберите этаж и нажмите на примерное место потери. Точку можно изменить повторным нажатием.</p><iframe id="campus-map" title="Выбрать место потери на карте AITU" src="{{url_for('campus_map',floor=request.form.get('map_floor',1),x=request.form.get('map_x',''),y=request.form.get('map_y',''))}}" loading="lazy"></iframe><input type="hidden" name="map_floor" id="map-floor" value="{{request.form.get('map_floor', '')}}"><input type="hidden" name="map_x" id="map-x" value="{{request.form.get('map_x', '')}}"><input type="hidden" name="map_y" id="map-y" value="{{request.form.get('map_y', '')}}"><p id="map-selection" role="status">Точка пока не выбрана.</p><button type="button" id="clear-map" class="btn outline">Убрать отметку</button></section><label>Место *<input id="location" name="location" value="{{request.form.get('location', '')}}" maxlength="120" minlength="2" required placeholder="Например, библиотека, 2 этаж"></label><label>Описание<textarea name="description" maxlength="1000" rows="5" placeholder="Цвет, особенности, где и когда видели...">{{request.form.get('description', '')}}</textarea></label><p class="micro">Новое объявление будет активно. После возврата вещи администрация отметит его как возвращённое.</p><button type="submit" class="btn wide">Сохранить объявление ↗</button><p class="micro">Локальный учебный прототип: запись публикуется от технического Demo-пользователя. Настоящей авторизации нет.</p></form></div><script>
+const input = document.getElementById('photo'), preview = document.getElementById('photo-preview');
+let previewURL;
+input.addEventListener('change', () => {
+  if (previewURL) URL.revokeObjectURL(previewURL);
+  preview.hidden = true;
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 8 * 1024 * 1024) { alert('Выберите фото до 8 МБ.'); input.value = ''; return; }
+  previewURL = URL.createObjectURL(file); preview.src = previewURL; preview.hidden = false;
+});
+</script><script src="{{url_for('static', filename='map-form.js')}}"></script>{% endblock %}

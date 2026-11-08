@@ -1,0 +1,4 @@
+AITU Map: https://yuujiso.github.io/aitumap/
+Source: https://github.com/Yuujiso/aitumap
+Developer: @yuujisoo. Designer: @meeezzanine.
+Original map assets retained; Findly adds a local selection bridge and marker overlay.
